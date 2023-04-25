@@ -5,9 +5,11 @@ import subprocess
 # Run the script using subprocess
 subprocess.call(["python3", "startdb.py"])
 
+
 app = Flask(__name__)
 
 #python3 startdb.py
+
 DATABASE = 'location.db'
 
 def get_db():
@@ -49,6 +51,7 @@ def get_data():
     for row in rows:
         data.append(dict(row))
     return jsonify(data)
+
 
 if __name__ == '__main__':
     app.run()
