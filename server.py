@@ -1,6 +1,7 @@
 from flask import Flask, g, request, jsonify
 import sqlite3
 import subprocess
+import datetime
 
 # Run the script using subprocess
 subprocess.call(["python3", "startdb.py"])
@@ -40,7 +41,7 @@ def add_data():
     log = request.args.get('Log')
     alt = request.args.get('Alt')
     db = get_db()
-    db.execute('INSERT INTO Position (Id, Name, Lat, Log, Alt) VALUES (?, ?, ?, ?, ?)', (ids, name, lat, log, alt))
+    db.execute('INSERT INTO Position (Id, Name, Lat, Log, Alt, Time) VALUES (?, ?, ?, ?, ?, ?)', (ids, name, lat, log, alt, datetime.datetime.now()))
     db.commit()
     return 'Data added to database'
     
