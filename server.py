@@ -33,18 +33,18 @@ def index():
     rows = cur.fetchall()
     return str(rows)
     
-@app.route('/add_data', methods=['GET'])
+@app.route('/add_data', methods=['POST'])
 def add_data():
     name = request.args.get('Name')
     lat = request.args.get('Lat')
-    log = request.args.get('Log')
+    log = request.args.get('Lon')
     alt = request.args.get('Alt')
     db = get_db()
-    db.execute('INSERT INTO Position (Name, Lat, Log, Alt, Time) VALUES (?, ?, ?, ?, ?)', (name, lat, log, alt, datetime.datetime.now()))
+    db.execute('INSERT INTO Position (Name, Lat, Lon, Alt, Time) VALUES (?, ?, ?, ?, ?)', (name, lat, log, alt, datetime.datetime.now()))
     db.commit()
     return 'Data added to database'
     
-@app.route('/get_data', methods=['POST'])
+@app.route('/get_data', methods=['GET'])
 def get_data():
     data = []
     db = get_db()
