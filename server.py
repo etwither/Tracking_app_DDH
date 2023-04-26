@@ -35,13 +35,12 @@ def index():
     
 @app.route('/add_data', methods=['GET'])
 def add_data():
-    ids = request.args.get('Id')
     name = request.args.get('Name')
     lat = request.args.get('Lat')
     log = request.args.get('Log')
     alt = request.args.get('Alt')
     db = get_db()
-    db.execute('INSERT INTO Position (Id, Name, Lat, Log, Alt, Time) VALUES (?, ?, ?, ?, ?, ?)', (ids, name, lat, log, alt, datetime.datetime.now()))
+    db.execute('INSERT INTO Position (Name, Lat, Log, Alt, Time) VALUES (?, ?, ?, ?, ?)', (name, lat, log, alt, datetime.datetime.now()))
     db.commit()
     return 'Data added to database'
     
