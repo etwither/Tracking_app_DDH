@@ -46,7 +46,7 @@ def add_data():
     data = request.get_json()
     value = [data[i] for i in fields]
     db = get_db()
-    db.execute('INSERT INTO Position (UUID, FullName, LastName, CompanyName, PhoneNumber, Lat, Lon, Alt, Time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, {datetime.datetime.now()})', (value))
+    db.execute('INSERT INTO Position (UUID, FirstName, LastName, CompanyName, PhoneNumber, Lat, Lon, Alt, Time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, {datetime.datetime.now()})', (value))
     db.commit()
     return 'Data added to database'
 
