@@ -1,12 +1,12 @@
 from flask import Flask, g, request, jsonify
 import sqlite3
-import subprocess
 import datetime
 
-# Run the script using subprocess
 from auth import require_bearer_token
 
-subprocess.call(["python3", "startdb.py"])
+from startdb import create_db
+
+create_db()
 
 app = Flask(__name__)
 
@@ -14,12 +14,14 @@ app = Flask(__name__)
 
 DATABASE = 'location.db'
 
+
 def get_db():
     db = getattr(g, '_database', None)
     if db is None:
         db = g._database = sqlite3.connect(DATABASE)
         db.row_factory = sqlite3.Row
     return db
+
 
 @app.teardown_appcontext
 def close_db(error):
@@ -46,7 +48,8 @@ def add_data():
     log = whole['Lon']
     alt = whole['Alt']
     db = get_db()
-    db.execute('INSERT INTO Position (UUID, Lat, Lon, Alt, Time) VALUES (?, ?, ?, ?, ?)', (uuid, lat, log, alt, datetime.datetime.now()))
+    db.execute('INSERT INTO Position (UUID, Lat, Lon, Alt, Time) VALUES (?, ?, ?, ?, ?)',
+               (uuid, lat, log, alt, datetime.datetime.now()))
     db.commit()
     return 'Data added to database'
 
