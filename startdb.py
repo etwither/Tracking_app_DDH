@@ -8,7 +8,7 @@ def create_db():
         print("Opened database successfully")
 
         conn.execute(
-            'CREATE TABLE Position (Id INTEGER PRIMARY KEY AUTOINCREMENT, UUID VARCHAR(30), Lat FLOAT, Lon FLOAT, Alt FLOAT, Time DATETIME)')  # creates the table
+            'CREATE TABLE Position (Id INTEGER PRIMARY KEY AUTOINCREMENT, UUID VARCHAR(30), FullName VARCHAR(30), LastName VARCHAR(30), CompanyName VARCHAR(30), PhoneNumber VARCHAR(30), Lat FLOAT, Lon FLOAT, Alt FLOAT, Time DATETIME)')  # creates the table
 
         print("Table created successfully")
         conn.close()
