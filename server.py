@@ -4,12 +4,13 @@ import subprocess
 import datetime
 
 # Run the script using subprocess
-subprocess.call(["python3", "startdb.py"])
+from auth import require_bearer_token
 
+subprocess.call(["python3", "startdb.py"])
 
 app = Flask(__name__)
 
-#python3 startdb.py
+# python3 startdb.py
 
 DATABASE = 'location.db'
 
@@ -25,15 +26,19 @@ def close_db(error):
     db = getattr(g, '_database', None)
     if db is not None:
         db.close()
-        
+
+
 @app.route('/')
+@require_bearer_token
 def index():
     db = get_db()
     cur = db.execute('SELECT * FROM Position')
     rows = cur.fetchall()
     return str(rows)
-    
+
+
 @app.route('/add_data', methods=['POST'])
+@require_bearer_token
 def add_data():
     whole = request.get_json()
     uuid = whole['UUID']
@@ -44,8 +49,10 @@ def add_data():
     db.execute('INSERT INTO Position (UUID, Lat, Lon, Alt, Time) VALUES (?, ?, ?, ?, ?)', (uuid, lat, log, alt, datetime.datetime.now()))
     db.commit()
     return 'Data added to database'
-    
+
+
 @app.route('/get_data', methods=['GET'])
+@require_bearer_token
 def get_data():
     data = []
     db = get_db()
@@ -58,4 +65,3 @@ def get_data():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', threaded=True)
-
