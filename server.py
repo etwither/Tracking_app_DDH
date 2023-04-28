@@ -42,11 +42,13 @@ def index():
 @app.route('/add_data', methods=['POST'])
 @require_bearer_token
 def add_data():
-    field = ['UUD','FullName','LastName','CompanyName','PhoneNumber','Lat','Lon','Alt']
+    fields = ['UUID', 'FirstName', 'LastName', 'CompanyName', 'PhoneNumber', 'Lat', 'Lon', 'Alt']
     data = request.get_json()
     value = [data[i] for i in fields]
     db = get_db()
-    db.execute('INSERT INTO Position (UUID, FirstName, LastName, CompanyName, PhoneNumber, Lat, Lon, Alt, Time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, {datetime.datetime.now()})', (value))
+    db.execute(
+        'INSERT INTO Position (UUID, FirstName, LastName, CompanyName, PhoneNumber, Lat, Lon, Alt, Time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        (*value, datetime.datetime.now()))
     db.commit()
     return 'Data added to database'
 
