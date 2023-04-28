@@ -65,5 +65,22 @@ def get_data():
     return jsonify(data)
 
 
+@app.route('/get_latest_data', methods=['GET'])
+@require_bearer_token
+def get_latest_data():
+    data = []
+    db = get_db()
+    cur = db.execute(
+        """
+            SELECT t1.* FROM Position t1 INNER JOIN (
+              SELECT UUID, MAX(Time) AS max_timestamp FROM Position GROUP BY UUID)
+              t2 ON t1.UUID = t2.UUID AND t1.Time = t2.max_timestamp;
+        """)
+    rows = cur.fetchall()
+    for row in rows:
+        data.append(dict(row))
+    return jsonify(data)
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', threaded=True)
